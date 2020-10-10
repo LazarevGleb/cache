@@ -2,7 +2,7 @@ package cache;
 
 public class CacheObject {
     private int frequency;
-    private Object value;
+    private final Object value;
 
     public CacheObject(Object value) {
         this.value = value;
@@ -15,5 +15,9 @@ public class CacheObject {
 
     public int getFrequency() {
         return frequency;
+    }
+
+    public void incrementFrequency() {
+        frequency++;
     }
 }

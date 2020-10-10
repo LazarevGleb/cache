@@ -24,10 +24,13 @@ public class LfuCache implements Cache {
 
     @Override
     public void add(Object value) {
-        cache.stream()
-                .filter(a -> a.getValue().equals(value))
-                .findFirst()
-                .ifPresent(cache::remove); //TODO increment frequency
+        Optional<CacheObject> cacheObject = cache.stream()
+                .filter(c -> c.getValue().equals(value))
+                .findFirst();
+        if(cacheObject.isPresent()){
+            cacheObject.get().incrementFrequency();
+            return;
+        }
 
         if (cache.size() == capacity) {
             int minFrequency = Integer.MAX_VALUE;
@@ -48,16 +51,14 @@ public class LfuCache implements Cache {
 
     @Override
     public boolean contains(Object value) {
-        Optional<CacheObject> first = cache.stream()
-                .filter(a -> a.getValue().equals(value))
+        Optional<CacheObject> cacheObject = cache.stream()
+                .filter(c -> c.getValue().equals(value))
                 .findFirst();
-        if (!first.isPresent()) {
-            return false;
+        if (cacheObject.isPresent()) {
+            cacheObject.get().incrementFrequency();
+            return true;
         }
-        CacheObject current = first.get();
-        cache.remove(current);
-        cache.add(current);
-        return true;
+        return false;
     }
 
     @Override
