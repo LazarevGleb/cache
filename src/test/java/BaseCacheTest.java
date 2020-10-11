@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class BaseCacheTest {
+class BaseCacheTest {
     protected Cache cache;
 
     @AfterEach
@@ -17,7 +17,7 @@ public class BaseCacheTest {
     }
 
     @Test
-    public void testGetCacheItems() {
+    void testGetCacheItems() {
         cache.add("abc");
         cache.add(1f);
         cache.add(LocalDate.now());
@@ -25,7 +25,7 @@ public class BaseCacheTest {
     }
 
     @Test
-    public void testClear() {
+    void testClear() {
         cache.add("abc");
         cache.add(1f);
         cache.clear();
@@ -33,7 +33,7 @@ public class BaseCacheTest {
     }
 
     @Test
-    public void testConstructorException() {
+    void testConstructorException() {
         assertThrows(IllegalArgumentException.class, () -> new LruCache(-1));
     }
 }
