@@ -1,25 +1,15 @@
 package cache;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class LfuCache implements Cache {
-    private final Logger logger = LoggerFactory.getLogger(LfuCache.class);
-    private final Set<CacheObject> cache;
-    private final long capacity;
-
+public class LfuCache extends BaseCache<CacheObject> {
     public LfuCache(final int capacity) {
-        if (capacity < 1) {
-            throw new IllegalArgumentException("Capacity must not be less than 1");
-        }
+        super(capacity);
         cache = new LinkedHashSet<>(capacity);
-        this.capacity = capacity;
     }
 
     @Override
@@ -27,7 +17,7 @@ public class LfuCache implements Cache {
         Optional<CacheObject> cacheObject = cache.stream()
                 .filter(c -> c.getValue().equals(value))
                 .findFirst();
-        if(cacheObject.isPresent()){
+        if (cacheObject.isPresent()) {
             cacheObject.get().incrementFrequency();
             return;
         }
@@ -49,7 +39,6 @@ public class LfuCache implements Cache {
         logger.info("Object {} is added or simply accessed", value);
     }
 
-    @Override
     public boolean contains(Object value) {
         Optional<CacheObject> cacheObject = cache.stream()
                 .filter(c -> c.getValue().equals(value))
@@ -59,17 +48,6 @@ public class LfuCache implements Cache {
             return true;
         }
         return false;
-    }
-
-    @Override
-    public void clear() {
-        cache.clear();
-        logger.info("Cache is empty");
-    }
-
-    @Override
-    public long size() {
-        return cache.size();
     }
 
     @Override

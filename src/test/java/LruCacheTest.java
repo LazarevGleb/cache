@@ -1,5 +1,4 @@
 import cache.LruCache;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -7,17 +6,10 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class LruCacheTest {
-    private LruCache cache;
-
+public class LruCacheTest extends BaseCacheTest {
     @BeforeEach
     public void setUp() {
         cache = new LruCache(3);
-    }
-
-    @AfterEach
-    public void destroy() {
-        cache.clear();
     }
 
     @Test
@@ -51,26 +43,5 @@ public class LruCacheTest {
         cache.add("abc");
         cache.add(1f);
         assertFalse(cache.contains(2f));
-    }
-
-    @Test
-    public void testGetCacheItems() {
-        cache.add("abc");
-        cache.add(1f);
-        cache.add(LocalDate.now());
-        assertEquals(3, cache.getCacheItems().size());
-    }
-
-    @Test
-    public void testClear() {
-        cache.add("abc");
-        cache.add(1f);
-        cache.clear();
-        assertEquals(0, cache.getCacheItems().size());
-    }
-
-    @Test
-    public void testConstructorException() {
-        assertThrows(IllegalArgumentException.class, () -> new LruCache(-1));
     }
 }
