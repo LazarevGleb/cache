@@ -1,15 +1,24 @@
 package cache;
 
-import java.util.LinkedHashSet;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
  * Least recently used (LRU) cache strategy
+ *
+ * @param <K> Type of ids in cache
  */
-public class LruCache extends BaseCache<Object> {
+public class LruCache<K> extends BaseCache<K, Object> {
     public LruCache(final int capacity) {
         super(capacity);
-        cache = new LinkedHashSet<>(capacity);
+        cache = new LinkedHashMap<>(capacity) {
+            @Override
+            protected boolean removeEldestEntry(Map.Entry eldest) {
+                return size() > capacity;
+            }
+        };
     }
 
     /**
@@ -21,45 +30,23 @@ public class LruCache extends BaseCache<Object> {
      * @param value given object to be added to the cache
      */
     @Override
-    public void add(Object value) {
-        checkValueAndRemove(value);
-        cache.add(value);
+    public void put(K key, Object value) {
+        cache.putIfAbsent(key, value);
         logger.info("Object {} is added or simply accessed", value);
     }
 
-    private void checkValueAndRemove(Object value) {
-        // if cache already has given value then there is a need to move it
-        // to the top of the cache by serial remove and add operations
-        if (cache.contains(value)) {
-            cache.remove(value);
-        }
-        // if cache capacity is over then least recently used object is deleted
-        else if (cache.size() == capacity) {
-            Object lru = cache.iterator().next();
-            cache.remove(lru);
-        }
+    @Override
+    public Object get(K key) {
+        return cache.get(key);
     }
 
-    /**
-     * Checks whether given object already exists in cache. Does remove and add operations
-     * to move object to the top of cache
-     *
-     * @param value given object to be checked
-     * @return true, if object already exists in cache
-     */
     @Override
-    public boolean contains(Object value) {
-        if (!cache.contains(value)) {
-            return false;
-        }
-        cache.remove(value);
-        cache.add(value);
-        logger.info("Object {} is accessed", value);
-        return true;
+    public Set<Map.Entry<K, Object>> getCacheItemsWithKeys() {
+        return cache.entrySet();
     }
 
     @Override
     public Set<Object> getCacheItems() {
-        return cache;
+        return new HashSet<>(cache.values());
     }
 }

@@ -3,19 +3,20 @@ package cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Set;
+import java.util.Map;
 
 /**
  * Basic implementation of the Cache. Does not include add and contains methods,
  * cause they are implemented by one of the cache strategies
  *
- * @param <T> type of cache items according to chosen strategy
+ * @param <K> Type of ids in cache
+ * @param <V> Type of cache items according to chosen strategy
  * @see LruCache
  * @see LfuCache
  */
-public abstract class BaseCache<T> implements Cache {
+public abstract class BaseCache<K, V> implements Cache<K> {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
-    protected Set<T> cache;
+    protected Map<K, V> cache;
     protected final long capacity;
 
     /**
@@ -38,7 +39,7 @@ public abstract class BaseCache<T> implements Cache {
     }
 
     @Override
-    public long size() {
+    public int size() {
         return cache.size();
     }
 }

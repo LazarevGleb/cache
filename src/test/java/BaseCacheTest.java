@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class BaseCacheTest {
-    protected Cache cache;
+    protected Cache<String> cache;
 
     @AfterEach
     public void destroy() {
@@ -17,17 +17,17 @@ class BaseCacheTest {
     }
 
     @Test
-    void testGetCacheItems() {
-        cache.add("abc");
-        cache.add(1f);
-        cache.add(LocalDate.now());
-        assertEquals(3, cache.getCacheItems().size());
+    void testSize() {
+        cache.put("1", "abc");
+        cache.put("1", "abc");
+        cache.put("2", LocalDate.now());
+        assertEquals(2, cache.getCacheItems().size());
     }
 
     @Test
     void testClear() {
-        cache.add("abc");
-        cache.add(1f);
+        cache.put("1", "abc");
+        cache.put("2", 2L);
         cache.clear();
         assertEquals(0, cache.getCacheItems().size());
     }
