@@ -1,19 +1,26 @@
 package cache;
 
-public class CacheObject {
+/**
+ * Item for LfuCache
+ */
+class CacheObject {
     private int frequency;
-    private Object value;
+    private final Object item;
 
-    public CacheObject(Object value) {
-        this.value = value;
+    public CacheObject(Object item) {
+        this.item = item;
         this.frequency = 1;
     }
 
-    public Object getValue() {
-        return value;
+    public Object getItem() {
+        return item;
     }
 
     public int getFrequency() {
         return frequency;
+    }
+
+    public void incrementFrequency() {
+        frequency++;
     }
 }

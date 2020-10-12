@@ -1,4 +1,4 @@
-import cache.LruCache;
+import cache.LfuCache;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -7,10 +7,10 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class LruCacheTest extends BaseCacheTest {
+class LfuCacheTest extends BaseCacheTest {
     @BeforeEach
     public void setUp() {
-        cache = new LruCache<>(3);
+        cache = new LfuCache<>(3);
     }
 
     @Test
@@ -25,17 +25,16 @@ class LruCacheTest extends BaseCacheTest {
         LocalDate now = LocalDate.now();
         cache.put("now", now);
         assertEquals(3, cache.size());
+        assertTrue(cache.getCacheItemsWithKeys().contains(Map.entry("1", "abc")));
+        assertTrue(cache.getCacheItemsWithKeys().contains(Map.entry("2", 2L)));
         assertTrue(cache.getCacheItemsWithKeys().contains(Map.entry("now", now)));
-        assertTrue(cache.getCacheItemsWithKeys().contains(Map.entry("4", ob)));
-        assertTrue(cache.getCacheItemsWithKeys().contains(Map.entry("abc", true)));
-        assertFalse(cache.getCacheItemsWithKeys().contains(Map.entry("2", 2L)));
-
+        assertFalse(cache.getCacheItemsWithKeys().contains(Map.entry("4", ob)));
     }
 
     @Test
     void testPut_2() {
-        cache.put("2", 2L);
-        cache.put("2", 2L);
+        cache.put("null", null);
+        cache.put("null", null);
         assertEquals(1, cache.size());
     }
 
