@@ -1,31 +1,33 @@
 package cache;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
  * In-memory cache. Basic implementation is BaseCache.
  * Includes two eviction strategies: LRU and LFU.
  *
+ * @param <K> Type of ids in cache
  * @see BaseCache
  * @see LfuCache
  * @see LruCache
  */
-public interface Cache {
+public interface Cache<K> {
     /**
      * Writes given value into the cache. If capacity is over then one item will be removed
      * from the cache according to chosen eviction strategy.
      *
      * @param value given object to be added to the cache
      */
-    void add(Object value);
+    void put(K key, Object value);
 
     /**
-     * Checks whether given object already exists in cache.
+     * Retrieves object from cache according to its key
      *
-     * @param value given object to be checked
-     * @return true, if object already exists in cache
+     * @param key id of object in cache
+     * @return object stored in cache with given key
      */
-    boolean contains(Object value);
+    Object get(K key);
 
     /**
      * Removes all items from the cache
@@ -37,7 +39,14 @@ public interface Cache {
      *
      * @return cache size
      */
-    long size();
+    int size();
+
+    /**
+     * Gets all items from the cache with their ids
+     *
+     * @return set of all cache items
+     */
+    Set<Map.Entry<K, Object>> getCacheItemsWithKeys();
 
     /**
      * Gets all items from the cache
