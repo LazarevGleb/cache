@@ -1,4 +1,4 @@
-# In-memory cache
+# In-memory cache ![CI/CD](https://github.com/LazarevGleb/cache/workflows/CI/CD/badge.svg?branch=master)
 Test task. Create an in-memory cache (for caching Objects) with configurable max size 
 and eviction strategy. Two strategies should be implemented: LRU and LFU.
 For this task it is assumed that only one thread will access the cache, 
