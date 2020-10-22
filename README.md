@@ -13,3 +13,7 @@ mvn clean install
 ```
 mvn test
 ```
+### Get docker image:
+```
+docker pull lazarevgb/cache:latest
+```
